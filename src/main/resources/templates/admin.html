@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:gap="http://www.w3.org/1999/xhtml"
+      xmlns:display="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Admin Page</title>
+    <style>
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+    <header>
+        <nav>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" th:if="${#httpServletRequest.userPrincipal != null}">Logout</button>
+            </form>
+            <button class="button" onclick="window.location.href='/'">To Home Page</button>
+        </nav>
+    </header>
+</head>
+<body>
+<h1>Admin Page</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Roles</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${userRolesMap[user.id]}"></td>
+        <td>
+            <div class="action-buttons">
+                <form th:action="@{/admin/{id}/edit(id=${user.id})}" method="get">
+                    <button type="submit" class="button">Edit</button>
+                </form>
+                <form th:action="@{/admin/{id}(id=${user.id})}" method="post">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
+</body>
+</html>

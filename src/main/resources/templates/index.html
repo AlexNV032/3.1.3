@@ -1,11 +1,21 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Spring Security Example</title>
 </head>
 <body>
-<h1>Welcome to Index PAGE!</h1>
-
-
+    <header>
+        <nav>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" th:if="${#httpServletRequest.userPrincipal != null}">Logout</button>
+            </form>
+            <form th:action="@{/login}" method="post" style="display:inline;">
+                <button type="submit" th:if="${#httpServletRequest.userPrincipal == null}">Sign In</button>
+            </form>
+        </nav>
+    </header>
+    <h1>Welcome to Index PAGE!</h1>
+    <button class="button" th:onclick="|window.location.href='@{/registration}'|">Registration new user</button>
 </body>
 </html>
